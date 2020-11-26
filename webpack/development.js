@@ -1,6 +1,6 @@
 module.exports = {
 	devServer: {
-		constentBase: './public',
+		// constentBase: './public',
 		port: 3000,
 	},
 	devtool: 'inline-source-map',
@@ -29,7 +29,7 @@ module.exports = {
 			{
 				test: /\.(s(a|c)ss|css)$/,
 				exclude: /\.module.(s(a|c)ss)$/,
-				loader: [
+				use: [
 					'style-loader',
 					'css-loader',
 					{
