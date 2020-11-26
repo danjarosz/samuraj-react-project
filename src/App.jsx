@@ -1,10 +1,13 @@
 import React from 'react';
+import StoreProvider from "./store/StoreProvider";
 import './App.scss';
 
 const App = () => (
-  <header>
-    Hello React!
-  </header>
+  <StoreProvider>
+    <header>
+      Hello React!
+    </header>
+  </StoreProvider>
 );
 
 export default App;
