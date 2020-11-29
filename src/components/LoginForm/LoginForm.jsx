@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import bemCssModules from 'bem-css-modules';
 
 import { default as LoginFormStyles } from "./LoginForm.module.scss";
@@ -31,7 +31,6 @@ const LoginForm = ({ handleOnClose, isModalOpen }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("SUBMIT")
     const { data, status } = await request.post(
       '/users',
       { login, password }
@@ -45,6 +44,12 @@ const LoginForm = ({ handleOnClose, isModalOpen }) => {
       setValidateMessage(data.message);
     }
   }
+
+  useEffect(() => {
+    if (isModalOpen) {
+      resetInputs();
+    }
+  }, [isModalOpen])
 
   const validateMessageComponent = validateMessage.length ? (
     <p className={style('validate-message')}>{validateMessage}</p>
