@@ -9,7 +9,7 @@ const UserMenu = ({ isUserLogged }) => (
   <>
     <p className={style("title")}>Panel użytkownika</p>
     <nav>
-      <ul>
+      <ul className={style("list")}>
         <li className={style("link")}>
           <Link to="/">Kursy w sprzedaży</Link>
         </li>
