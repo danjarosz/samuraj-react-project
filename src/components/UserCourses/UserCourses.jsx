@@ -13,7 +13,7 @@ const UserCourses = () => {
   );
 
   const coursesElements = boughtCourses.map((course) => (
-    <Course key={course.id} {...course} />
+    <Course key={course.id} isUserContext={true} {...course} />
   ));
 
   return (
