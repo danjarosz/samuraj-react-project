@@ -5,6 +5,7 @@ import { StoreContext } from "../../store/StoreProvider";
 import { default as ContentStyles } from "./Content.module.scss";
 import Courses from "../Courses/Courses";
 import UserCourses from "../UserCourses/UserCourses";
+import AdminPanel from "../AdminPanel/AdminPanel";
 
 const style = bemCssModules(ContentStyles);
 
@@ -24,11 +25,7 @@ const Content = () => {
           <Route exact path="/my-courses" render={() => <UserCourses />} />
         )}
         {isAdmin && (
-          <Route
-            exact
-            path="/manage-courses"
-            render={() => <p>Zarządzanie kursami</p>}
-          />
+          <Route exact path="/manage-courses" render={() => <AdminPanel />} />
         )}
         <Redirect to="/" />
       </Switch>
