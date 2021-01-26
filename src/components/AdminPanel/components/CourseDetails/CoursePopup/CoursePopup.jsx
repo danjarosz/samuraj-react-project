@@ -47,14 +47,15 @@ const CoursePopup = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     const courseObject = {
-      id,
       authors: formAuthors,
       img: formImg,
       title: formTitle,
-      price: formPrice,
+      price: Number(formPrice),
     };
 
     if (isEditMode) {
+      courseObject.id = id;
+
       const { data, status } = await request.put("/courses", courseObject);
 
       if (status === 202) {
