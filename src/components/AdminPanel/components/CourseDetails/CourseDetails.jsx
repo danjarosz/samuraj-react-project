@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import request from "../../../../helpers/request";
 import { StoreContext } from "../../../../store/StoreProvider";
+import CoursePopup from "./CoursePopup/CoursePopup";
 
 const CourseDetails = (props) => {
   const { id, title } = props;
@@ -32,7 +33,8 @@ const CourseDetails = (props) => {
     <details>
       <summary>{title}</summary>
       <button onClick={showPopup}>Edytuj</button>
-      <button onCLick={handleRemoveCourse}>Usuń</button>
+      <button onClick={handleRemoveCourse}>Usuń</button>
+      <CoursePopup isPopupOpen={isPopupOpen} hidePopup={hidePopup} {...props} />
     </details>
   );
 };

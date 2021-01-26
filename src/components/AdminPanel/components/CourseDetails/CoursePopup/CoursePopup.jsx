@@ -4,6 +4,7 @@ import { StoreContext } from "../../../../../store/StoreProvider";
 import Modal from "../../../../Modal/Modal";
 
 import { default as CoursePopupStyles } from "./CoursePopup.module.scss";
+import request from "../../../../../helpers/request";
 const style = bemCssModules(CoursePopupStyles);
 
 const CoursePopup = ({
@@ -17,7 +18,7 @@ const CoursePopup = ({
   isPopupOpen,
 }) => {
   const [formAuthors, setFormAuthors] = useState(authors);
-  const [formAuthor, seFormAuthor] = useState("");
+  const [formAuthor, setFormAuthor] = useState("");
   const [formImg, setFormImg] = useState(img);
   const [formPrice, setFormPrice] = useState(price);
   const [formTitle, setFormTitle] = useState(title);
@@ -29,10 +30,62 @@ const CoursePopup = ({
     fn(value);
   };
 
+  const addAuthor = (e) => {
+    e.preventDefault();
+
+    setFormAuthors((prev) => [...prev, formAuthor]);
+    setFormAuthor("");
+  };
+
+  const deleteAuthor = (e) => {
+    const authorToDelete = e.target.dataset.author;
+    setFormAuthors((prev) =>
+      prev.filter((author) => author !== authorToDelete)
+    );
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const courseObject = {
+      id,
+      authors: formAuthors,
+      img: formImg,
+      title: formTitle,
+      price: formPrice,
+    };
+
+    if (isEditMode) {
+      const { data, status } = await request.put("/courses", courseObject);
+
+      if (status === 202) {
+        setCourses(data.courses);
+      }
+    } else {
+      const { data, status } = await request.post("/courses", courseObject);
+
+      if (status === 201) {
+        setCourses(data.courses);
+      }
+    }
+
+    hidePopup(e);
+  };
+
+  const authorsElements = formAuthors.map((author) => (
+    <li key={author}>
+      <p>{author}</p>
+      <button data-author={author} onClick={deleteAuthor}>
+        Usuń
+      </button>
+    </li>
+  ));
+
+  const correctLabel = isEditMode ? "Aktualizuj kurs" : "Utwórz kurs";
+
   return (
     <Modal handleOnClose={hidePopup} isOpen={isPopupOpen}>
       <div className={style()}>
-        <form className={style("form")} method="submit">
+        <form className={style("form")} method="submit" onSubmit={handleSubmit}>
           <div className={style("form-row")}>
             <label>
               <span>Autor</span>
@@ -41,7 +94,7 @@ const CoursePopup = ({
                 value={formAuthor}
                 onChange={(e) => handleOnChange(e, setFormAuthor)}
               />
-              <button>Dodaj autora</button>
+              <button onClick={addAuthor}>Dodaj autora</button>
             </label>
           </div>
           <div className={style("form-row")}>
@@ -74,13 +127,13 @@ const CoursePopup = ({
               />
             </label>
           </div>
-          <button type="submit"></button>
+          <button type="submit">{correctLabel}</button>
           <button type="button" onClick={hidePopup}>
             Anuluj
           </button>
         </form>
         <p>Lista autorów</p>
-        <ul></ul>
+        <ul>{authorsElements}</ul>
       </div>
     </Modal>
   );
